@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useApp } from '../context/AppContext';
 
-export default function ProfileScreen() {
-  const { user, setUser } = useApp();
+export default function ProfileScreen({ navigation }) {
+  const { user, setUser, auth } = useApp();
   const [name, setName] = useState(user.name || '');
   const [bio, setBio] = useState(user.bio || '');
   const [skillsOffered, setSkillsOffered] = useState((user.skillsOffered || []).join(', '));
@@ -24,6 +24,16 @@ export default function ProfileScreen() {
         skillsWanted: skillsWanted.split(',').map((s) => s.trim()).filter(Boolean),
       })}>
         <Text style={styles.buttonText}>Save</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity 
+        style={[styles.button, { backgroundColor: '#dc2626', marginTop: 16 }]} 
+        onPress={() => {
+          auth.logout();
+          navigation.replace('Login');
+        }}
+      >
+        <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
     </View>
   );

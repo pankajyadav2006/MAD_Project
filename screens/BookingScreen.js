@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useApp, mockSkills } from '../context/AppContext';
 
@@ -10,16 +10,18 @@ export default function BookingScreen() {
   const [time, setTime] = useState('');
   const [rating, setRating] = useState('');
   const [review, setReview] = useState('');
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   const skillId = route.params?.skillId;
   const skill = mockSkills.find((s) => s.id === skillId);
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <View style={{ flex: 1, padding: 16, backgroundColor: '#f9fafb' }}>
       {skill && (
         <View style={styles.card}>
           <Text style={styles.title}>{skill.skill}</Text>
-          <Text style={{ color: '#374151' }}>{skill.description}</Text>
+          <Text style={{ color: '#374151', marginBottom: 8 }}>{skill.description}</Text>
+          <Text style={{ color: '#6b7280', fontSize: 14 }}>by {skill.user} • {skill.location}</Text>
         </View>
       )}
       <Text style={styles.section}>Book a session</Text>
@@ -27,8 +29,31 @@ export default function BookingScreen() {
         <TextInput placeholder="YYYY-MM-DD" value={date} onChangeText={setDate} style={[styles.input, { flex: 1 }]} />
         <TextInput placeholder="HH:mm" value={time} onChangeText={setTime} style={[styles.input, { width: 120 }]} />
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => bookingApi.book({ skillId, date, time })}>
-        <Text style={styles.buttonText}>Book</Text>
+      <TouchableOpacity 
+        style={[styles.button, bookingLoading && styles.buttonDisabled]} 
+        onPress={async () => {
+          if (!date.trim()) {
+            Alert.alert('Error', 'Please select a date');
+            return;
+          }
+          if (!time.trim()) {
+            Alert.alert('Error', 'Please select a time');
+            return;
+          }
+          setBookingLoading(true);
+          setTimeout(() => {
+            bookingApi.book({ skillId, date, time });
+            setDate('');
+            setTime('');
+            setBookingLoading(false);
+            Alert.alert('Success', 'Booking confirmed!');
+          }, 1000);
+        }}
+        disabled={bookingLoading}
+      >
+        <Text style={styles.buttonText}>
+          {bookingLoading ? 'Booking...' : 'Book Session'}
+        </Text>
       </TouchableOpacity>
 
       <Text style={styles.section}>My Bookings</Text>
@@ -67,8 +92,18 @@ const styles = StyleSheet.create({
   section: { marginTop: 12, marginBottom: 8, fontWeight: '800' },
   input: { borderWidth: 1, borderColor: '#e5e7eb', borderRadius: 10, padding: 10, marginBottom: 8 },
   button: { backgroundColor: '#2563eb', padding: 12, borderRadius: 10, alignItems: 'center', marginBottom: 12 },
+  buttonDisabled: { backgroundColor: '#9ca3af', opacity: 0.7 },
   buttonText: { color: '#fff', fontWeight: '700' },
-  bookingItem: { backgroundColor: '#fff', padding: 12, borderRadius: 10, marginBottom: 8 },
+  bookingItem: { 
+    backgroundColor: '#fff', 
+    padding: 16, 
+    borderRadius: 12, 
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
 });
 
 

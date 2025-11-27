@@ -14,11 +14,52 @@ const Tab = createBottomTabNavigator();
 
 function MainTabs() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Bookings" component={BookingScreen} />
-      <Tab.Screen name="Messages" component={ChatScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: '#fff',
+          borderTopWidth: 1,
+          borderTopColor: '#e5e7eb',
+          paddingBottom: 5,
+          paddingTop: 5,
+          height: 60,
+        },
+        tabBarActiveTintColor: '#2563eb',
+        tabBarInactiveTintColor: '#6b7280',
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
+      }}
+    >
+      <Tab.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🏠</Text>,
+        }}
+      />
+      <Tab.Screen 
+        name="Bookings" 
+        component={BookingScreen} 
+        options={{
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>📅</Text>,
+        }}
+      />
+      <Tab.Screen 
+        name="Messages" 
+        component={ChatScreen} 
+        options={{
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>💬</Text>,
+        }}
+      />
+      <Tab.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={{
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>👤</Text>,
+        }}
+      />
     </Tab.Navigator>
   );
 }

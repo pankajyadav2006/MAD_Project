@@ -14,6 +14,12 @@ export default function SkillCard({ item, onPress }) {
       </View>
       <Text style={styles.title}>{item.skill}</Text>
       <Text style={styles.desc}>{item.description}</Text>
+      {item.price && (
+        <View style={styles.priceRow}>
+          <Text style={styles.price}>{item.price}</Text>
+          <Text style={styles.category}>{item.category}</Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
@@ -44,9 +50,27 @@ const styles = StyleSheet.create({
   },
   user: { fontWeight: '600', fontSize: 14 },
   location: { color: '#6b7280', fontSize: 12 },
-  rating: { fontWeight: '700' },
+  rating: { fontWeight: '700', color: '#f59e0b' },
   title: { fontSize: 16, fontWeight: '700', marginBottom: 4 },
-  desc: { color: '#374151' },
+  desc: { color: '#374151', marginBottom: 8 },
+  priceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#059669',
+  },
+  category: {
+    fontSize: 12,
+    color: '#6b7280',
+    backgroundColor: '#f3f4f6',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
 });
 
 
